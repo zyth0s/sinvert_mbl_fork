@@ -11,4 +11,3 @@ set(SI_MPI_INCLUDE /usr/include/mpi/)
 
 #for open mpi in Arch Linux
 #set(SI_MPI_INCLUDE   /usr/include/openmpi)
-#set(MPI_LIB /usr/lib64/openmpi/)
