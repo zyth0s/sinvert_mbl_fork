@@ -2,6 +2,7 @@ static char help[] = "Shift invert demonstration code for the random field XXZ c
 "The command line options are:\n"
 "  -L = length of the chain\n"
 "  -Delta <Delta>, where <Delta> = XXZ anisotropy. \n"
+"  -J <J>, where <J> = XX coupling. \n"
 "  -nup <nup>, where <nup> = nup sector (0, 1, 2 etc) defined by number of up spins. \n"
 "  -W <W>, for intensity of field disorder. \n"
 "  -random_seed <ds>, disorder seed. \n"
@@ -20,9 +21,10 @@ int main(int argc,char **argv)
     PetscErrorCode ierr;
     Mat            H; // PETSC sparse matrix  
     PetscInt       L; // length of the chain
-    PetscInt       random_seed; // length of the chain
+    PetscInt       random_seed; // seed of the random number generator
     PetscInt       nup;  // up spin sector
     PetscReal      Delta=1.0;  // Sz Sz coupling
+    PetscReal      J=1.0; // Sx Sx + Sy Sy coupling
     PetscReal      W; //disorder strength
 
 
@@ -34,6 +36,7 @@ int main(int argc,char **argv)
 
     // parse options
     PetscOptionsGetReal(NULL, NULL,"-Delta",&Delta,NULL);
+    PetscOptionsGetReal(NULL, NULL,"-J",&J,NULL);
     PetscOptionsGetInt(NULL, NULL,"-L",&L,NULL);
     PetscOptionsGetInt(NULL, NULL,"-random_seed",&random_seed,NULL);
     PetscOptionsGetInt(NULL, NULL,"-nup",&nup,NULL);
@@ -48,7 +51,7 @@ int main(int argc,char **argv)
         std::vector<double> fields(L);
         for(size_t i=0;i<L; i++) fields[i] = disorder_dist(gen);
 
-        XXZHamiltonian hamiltonian(&basis, 1.0, 1.0, fields);
+        XXZHamiltonian hamiltonian(&basis, Delta, J, fields);
 
         std::vector<int> d_nnz, o_nnz;
         int nnz;
@@ -149,13 +152,13 @@ int main(int argc,char **argv)
         for(int i=0; i<nconv; i++)
         {
             EPSGetEigenpair(eps_si,i, &kr, &ki, evecreal, tmp); 
-            VecCopy(evecreal, tmp);
-            size_t operator_site=3;
-            op.apply_Siz(operator_site,&tmp);
             double Sz; 
+            size_t operator_site=3;
+            VecCopy(evecreal, tmp);
+            op.apply_Siz(operator_site,&tmp);
             VecDot(evecreal,tmp, &Sz);
 
-            if(0==myrank) std::cout << "E("<<i<<") =" << kr << "    <psi|Sz["<<operator_site<<"]|psi>  = " << Sz << std::endl;
+            if(0==myrank) std::cout << "E("<<i<<") = " << kr << "   \t<psi|Sz["<<operator_site<<"]|psi> = " << Sz << std::endl;
         }
 
         VecDestroy(&evecreal);

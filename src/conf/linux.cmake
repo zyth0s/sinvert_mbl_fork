@@ -7,4 +7,8 @@ set(SI_PETSC_ARCH    $ENV{PETSC_ARCH})
 # set(SI_MPI_LIB       $ENV{I_MPI_ROOT}/lib64/)
 
 #for open mpi in Debian
-set(SI_MPI_INCLUDE   /usr/include/mpi/)
+set(SI_MPI_INCLUDE /usr/include/mpi/)
+
+#for open mpi in Arch Linux
+#set(SI_MPI_INCLUDE   /usr/include/openmpi)
+#set(MPI_LIB /usr/lib64/openmpi/)
