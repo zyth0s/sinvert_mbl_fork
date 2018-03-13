@@ -1,3 +1,21 @@
+/*  
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+    Copyright 2018, David J. Luitz (C)
+*/
+
 #ifndef HAMILTONIAN_H
 #define HAMILTONIAN_H
 
@@ -16,7 +34,6 @@ class XXZHamiltonian
 
     public:
         XXZHamiltonian(Basis * baseptr__, double Delta__, double J__, std::vector<double> fields__);
-        //void calculate_sparse_rows(size_t begin_row_, size_t end_row_, std::vector<int> & row_idxs_, std::vector<int> & col_idxs_, std::vector<Scalar> & entries_, std::vector<int> & d_nnz_, std::vector<int> & o_nnz_);
         void calculate_sparse_rows(size_t begin_row_, size_t end_row_,std::vector<int> & row_idxs_, std::vector<int> & col_idxs_, std::vector<double> & entries_); 
         int calculate_nnz(size_t begin_row_, size_t end_row_, std::vector<int> & d_nnz_, std::vector<int> & o_nnz_); 
 };

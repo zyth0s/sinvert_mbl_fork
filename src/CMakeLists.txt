@@ -1,3 +1,4 @@
+#    Copyright 2018, David J. Luitz (C)
 cmake_minimum_required(VERSION 3.7)
 
 
