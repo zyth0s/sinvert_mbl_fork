@@ -43,7 +43,7 @@ int main(int argc,char **argv)
     PetscReal      Delta=1.0;  // Sz Sz coupling
     PetscReal      J=1.0; // Sx Sx + Sy Sy coupling
     PetscReal      W; //disorder strength
-
+    PetscBool      output_matrix; // flag for writing matrix to Matrix Market format
 
     //// Set up MPI and SLEPC context
     SlepcInitialize(&argc,&argv,"slepc.options",help);
@@ -58,7 +58,7 @@ int main(int argc,char **argv)
     PetscOptionsGetInt(NULL, NULL,"-random_seed",&random_seed,NULL);
     PetscOptionsGetInt(NULL, NULL,"-nup",&nup,NULL);
     PetscOptionsGetReal(NULL, NULL,"-W",&W,NULL);
-
+    PetscOptionsGetBool(NULL, NULL,"-output_matrix",&output_matrix,NULL);
 
     Basis basis(L,nup); // generate basis using nup conservation law
     {
@@ -105,6 +105,14 @@ int main(int argc,char **argv)
     MatAssemblyEnd(H,MAT_FINAL_ASSEMBLY);
     if (myrank==0) std::cout << " done. " << std::endl;
 
+    if (output_matrix) {
+      PetscViewer    view;
+      PetscViewerASCIIOpen(PETSC_COMM_WORLD,"Matrix.mtx",&view);
+      PetscViewerPushFormat(view,PETSC_VIEWER_ASCII_MATRIXMARKET);
+      MatView(H,view);
+      PetscViewerPopFormat(view);
+      PetscViewerDestroy(&view);
+    }
 
 
     ////////////////////////////////////
