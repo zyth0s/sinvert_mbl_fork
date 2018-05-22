@@ -174,6 +174,7 @@ int main(int argc,char **argv)
             std::cout << "Central eigenpairs:" << std::endl;
         }
 
+	PetscBool get_wave_function=PETSC_FALSE; // change this to obtain the wave-function
         for(int i=0; i<nconv; i++)
         {
             EPSGetEigenpair(eps_si,i, &kr, &ki, evecreal, tmp); 
@@ -184,6 +185,30 @@ int main(int argc,char **argv)
             VecDot(evecreal,tmp, &Sz);
 
             if(0==myrank) std::cout << "E("<<i<<") = " << kr << "   \t<psi|Sz["<<operator_site<<"]|psi> = " << Sz << std::endl;
+
+	    if (get_wave_function)
+	      {
+		Vec Vec_local;
+		if (mpisize==1) { VecCreateSeq(PETSC_COMM_SELF,basis.get_size(),&Vec_local); VecCopy(evecreal,Vec_local); }
+		else
+		  {
+		    VecScatter ctx; VecScatterCreateToZero(evecreal,&ctx,&Vec_local);
+		    VecScatterBegin(ctx,evecreal,Vec_local,INSERT_VALUES,SCATTER_FORWARD); 
+		    VecScatterEnd(ctx,evecreal,Vec_local,INSERT_VALUES,SCATTER_FORWARD);
+		    VecScatterDestroy(&ctx);
+		  }
+
+		if (myrank==0)
+		  {
+		    PetscScalar * state; VecGetArray(Vec_local, &state);
+		    // now you can work on state --  e.g. access state[23];
+		    
+		    VecRestoreArray(Vec_local, &state);
+		  }
+		VecDestroy(&Vec_local);
+	      }
+
+
         }
 
         VecDestroy(&evecreal);
