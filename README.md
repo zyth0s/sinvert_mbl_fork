@@ -11,7 +11,7 @@ The main program sinvert.cc uses these data structures to communicate with the P
 The code is licenced with GPL v3. If you need further documentations and installation instructions, **please refer to the accompanying paper**:
 
 [1] Francesca Pietracaprina, Nicolas Mace, David J. Luitz and Fabien Alet,    
-*"Shift-invert diagonalization of large many-body localizing spin chains"*,     
-**[arXiv:1803.05395](https://arxiv.org/abs/1803.05395)**
+*["Shift-invert diagonalization of large many-body localizing spin chains"](https://scipost.org/SciPostPhys.5.5.045/pdf)*,     
+**[SciPost Phys. 5, 045 (2018)](https://scipost.org/SciPostPhys.5.5.045)**
 
 In case you use this code for academic purposes, please include a reference to this paper [1] in relevant publications.
