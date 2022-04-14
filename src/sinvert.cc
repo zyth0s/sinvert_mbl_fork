@@ -68,6 +68,11 @@ int main(int argc,char **argv)
         std::vector<double> fields(L);
         for(size_t i=0;i<L; i++) fields[i] = disorder_dist(gen);
 
+        // FIXME hardcoded here to reproduce the results in the paper
+        fields = { 0.557068,2.06559,2.14767,2.08351,0.741382,-0.69371,
+                  -1.21479,-2.65972,-1.36406,-0.134009,1.87301,-0.120137,
+                  -0.643291,2.01647,-0.975623,0.889031 };
+
         XXZHamiltonian hamiltonian(&basis, Delta, J, fields);
 
         std::vector<int> d_nnz, o_nnz;
